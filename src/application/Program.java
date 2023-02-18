@@ -23,7 +23,10 @@ public class Program {
 		System.out.print("Check-out date (dd/MM/yyyy): ");
 		Date checkOut = sdf.parse(sc.next());
 		
-		if (!checkOut.after(checkIn)) { //Date, tem um methodo chamado after() que testa se uma Data é depois da outra!
+		//Ainda temos essa validação feita no programa principal, que é na hora de INSTANCIAR o objeto!
+		//Ainda não vamos tirar essa validação daqui pq ela tenque ser uma validação no CONSTRUTOR!! ja que é na INSTANCIAÇÃO do objeto
+		//Porém, o CONSTRUTOR não tem como eu colocar ele para retornar um String!
+		if (!checkOut.after(checkIn)) { 
 			System.out.println("Error in reservation: Check-out date must be after check-in date");
 		}
 		else {
@@ -38,20 +41,16 @@ public class Program {
 			System.out.print("Check-out date (dd/MM/yyyy): ");
 			checkOut = sdf.parse(sc.next());
 			
-			Date now = new Date(); //Objeto com data atual!
-			
-			if (checkIn.before(now) || checkOut.before(now)) { //Se a data checkin for antes do agora ou a data de chekout tmb
-				System.out.println("Error in reservation: Reservation dates for update must be future dates");
-			}
-			else if (!checkOut.after(checkIn)) { //Se a data de checkout nao é posterior a data de chekin
-				System.out.println("Error in reservation: Check-out date must be after check-in date");
+			String error = reservation.updateDates(checkIn, checkOut); 
+			//Agora a função reservarion() do objt reservation vai retornar uma String, que vamos guardar!	
+			if (error != null) {
+				System.out.println("Error in reservations: " + error);
 			}
 			else {
-				reservation.updateDates(checkIn, checkOut);
 				System.out.println("Reservation: " + reservation);
 			}
 		}
-		
-		sc.close();
+	sc.close();
 	}
 }
+

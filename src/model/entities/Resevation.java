@@ -1,9 +1,10 @@
-package model.entities;
+package model.entities;	
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+//--Lógica de Validação DELEGADA para a classe [Reservartion] "tratamento da excessão"--
 public class Resevation {
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");  //Para formatar um tipo Date!
@@ -41,7 +42,6 @@ public class Resevation {
 		return checkOut;
 	}
 
-	
 	//Não temos setCheckout e o setCheckin pois não vou dexar que as datas sejam alteradas arbitariamente!
 	//Temos um metodo para isso  updateDates()
 	
@@ -54,9 +54,18 @@ public class Resevation {
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); //Isso converte o valor da var: diff que estava em milisseconds para Dias!	
 	}
 	
-	public void updateDates(Date checkIn, Date checkOut) {
+	public String updateDates(Date checkIn, Date checkOut) {
+		Date now = new Date(); //Objeto com data atual!
+		if (checkIn.before(now) || checkOut.before(now)) { //Se a data checkin for antes do agora ou a data de chekout tmb
+			return "Reservation dates for update must be future dates"; //Retorna essa String
+		}
+		if (!checkOut.after(checkIn)) { //Se a data de checkout nao é posterior a data de chekin
+			return "Check-out date must be after check-in date"; //Retorna essa String
+		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null; //Para indicar que não teve nenhum erro, mando retornar NULL
+		//null é o critério para dizer que minha operação não deu nenhum erro!
 	}
 	
 	@Override
